@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ভেক্টর ইন্টারেক্টিভ সিমুলেটর | Lumen Coaching Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #111c35;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #10b981;
+      --gold: #f59e0b;
+      --danger: #ef4444;
+      --purple: #8b5cf6;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Hind Siliguri', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #0f172a;
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+    }
+    .brand h1 { font-size: 1.15rem; font-weight: 700; color: #fff; }
+    .brand span { font-size: 0.8rem; color: #93c5fd; }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    main {
+      flex: 1;
+      padding: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .sim-view { display: none; }
+    .sim-view.active { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; animation: fadeIn 0.3s; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Canvas Card */
+    .canvas-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .canvas-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .canvas-header h2 { font-size: 1.15rem; font-weight: 700; color: #fff; }
+    canvas {
+      width: 100%;
+      height: 480px;
+      background: #070d19;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      display: block;
+    }
+
+    /* Controls Panel */
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .controls-card h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 10px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .control-group label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .control-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .preset-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .btn-preset {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .btn-preset:hover { background: var(--primary); color: white; }
+
+    /* Results Dashboard */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .result-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .result-box span { font-size: 0.82rem; color: var(--text-muted); display: block; }
+    .result-box strong { font-size: 1.25rem; font-family: 'Fira Code', monospace; }
+
+    .formula-callout {
+      background: rgba(59, 130, 246, 0.12);
+      border-left: 4px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 14px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      background: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">L</div>
+      <div>
+        <h1>ভেক্টর ইন্টারেক্টিভ ল্যাব (Vector Physics Simulator)</h1>
+        <span>Lumen Coaching Center • Academic & Admission Care</span>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('sim-parallelogram', this)">📐 সামান্তরিক সূত্র</button>
+      <button class="tab-btn" onclick="switchTab('sim-river', this)">⛵ নদী ও নৌকা</button>
+      <button class="tab-btn" onclick="switchTab('sim-multiplication', this)">🌀 ডট ও ক্রস গুণন</button>
+      <a href="presentation.html" class="tab-btn" style="text-decoration: none; border-color: #3b82f6; color: #93c5fd;">📺 স্লাইড শো</a>
+      <a href="lecture-sheet.html" class="tab-btn" style="text-decoration: none; border-color: #10b981; color: #6ee7b7;">📄 লেকচার শিট</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- SIMULATOR 1: PARALLELOGRAM LAW -->
+    <section class="sim-view active" id="sim-parallelogram">
+      <div class="canvas-card">
+        <div class="canvas-header">
+          <h2>📐 সামান্তরিক সূত্রের সাহায্যে লব্ধি (Resultant) বিশ্লেষণ</h2>
+          <span style="font-size: 0.85rem; color: var(--gold);">● লাইভ ভেক্টর গ্রাফিক্স</span>
+        </div>
+        <canvas id="canvasPgm" width="700" height="480"></canvas>
+      </div>
+
+      <div class="controls-card">
+        <h3>🎛️ ভেক্টর কন্ট্রোল প্যানেল</h3>
+
+        <div class="control-group">
+          <label><span>বল \(P\) এর মান:</span> <strong id="lblP" style="color: #60a5fa;">120 N</strong></label>
+          <input type="range" id="rangeP" min="20" max="200" value="120">
+        </div>
+
+        <div class="control-group">
+          <label><span>বল \(Q\) এর মান:</span> <strong id="lblQ" style="color: #34d399;">90 N</strong></label>
+          <input type="range" id="rangeQ" min="20" max="200" value="90">
+        </div>
+
+        <div class="control-group">
+          <label><span>মধ্যবর্তী কোণ \(\alpha\):</span> <strong id="lblAlpha" style="color: #fbbf24;">60°</strong></label>
+          <input type="range" id="rangeAlpha" min="0" max="180" value="60">
+          <div class="preset-btns">
+            <button class="btn-preset" onclick="setAlpha(0)">0° (একই দিক)</button>
+            <button class="btn-preset" onclick="setAlpha(90)">90° (সমকোণ)</button>
+            <button class="btn-preset" onclick="setAlpha(120)">120° (P=Q=R)</button>
+            <button class="btn-preset" onclick="setAlpha(180)">180° (বিপরীত)</button>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-box" style="border-left: 3px solid #fbbf24;">
+            <span>লব্ধির মান (R):</span>
+            <strong id="valR" style="color: #fbbf24;">182.5 N</strong>
+          </div>
+          <div class="result-box" style="border-left: 3px solid #34d399;">
+            <span>লব্ধির দিক (\(\theta\)):</span>
+            <strong id="valTheta" style="color: #34d399;">25.3°</strong>
+          </div>
+        </div>
+
+        <div class="formula-callout">
+          <strong>মূল সূত্র:</strong><br>
+          • \(R = \sqrt{P^2 + Q^2 + 2PQ\cos\alpha}\)<br>
+          • \(\tan\theta = \frac{Q\sin\alpha}{P + Q\cos\alpha}\)
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMULATOR 2: RIVER & BOAT -->
+    <section class="sim-view" id="sim-river">
+      <div class="canvas-card">
+        <div class="canvas-header">
+          <h2>⛵ নদী-নৌকা পারাপার ও ড্রাফট সিমুলেটর</h2>
+          <span style="font-size: 0.85rem; color: #38bdf8;">● অ্যানিমেটেড স্রোত</span>
+        </div>
+        <canvas id="canvasRiver" width="700" height="480"></canvas>
+      </div>
+
+      <div class="controls-card">
+        <h3>🎛️ নদী ও নৌকার প্যারামিটার</h3>
+
+        <div class="control-group">
+          <label><span>স্রোতের বেগ (\(u\)):</span> <strong id="lblU" style="color: #38bdf8;">3 km/h</strong></label>
+          <input type="range" id="rangeU" min="0" max="15" value="3" step="0.5">
+        </div>
+
+        <div class="control-group">
+          <label><span>নৌকার বেগ (\(v\)):</span> <strong id="lblV" style="color: #34d399;">6 km/h</strong></label>
+          <input type="range" id="rangeV" min="1" max="20" value="6" step="0.5">
+        </div>
+
+        <div class="control-group">
+          <label><span>নদীর প্রস্থ (\(d\)):</span> <strong id="lblD">1.5 km</strong></label>
+          <input type="range" id="rangeD" min="0.5" max="5" value="1.5" step="0.1">
+        </div>
+
+        <div class="control-group">
+          <label><span>যাত্রার কোণ (\(\alpha\)):</span> <strong id="lblRiverAlpha" style="color: #fbbf24;">120°</strong></label>
+          <input type="range" id="rangeRiverAlpha" min="0" max="180" value="120">
+          <div class="preset-btns">
+            <button class="btn-preset" onclick="setRiverPreset('min-time')">⚡ সর্বনিম্ন সময় (90°)</button>
+            <button class="btn-preset" onclick="setRiverPreset('min-dist')">🎯 আড়াআড়ি পারাপার</button>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-box" style="border-left: 3px solid #38bdf8;">
+            <span>কার্যকর লব্ধি বেগ (w):</span>
+            <strong id="valW" style="color: #38bdf8;">5.20 km/h</strong>
+          </div>
+          <div class="result-box" style="border-left: 3px solid #f59e0b;">
+            <span>পার হতে সময় (t):</span>
+            <strong id="valTime" style="color: #f59e0b;">17.3 মিনিট</strong>
+          </div>
+          <div class="result-box" style="border-left: 3px solid #ef4444; grid-column: span 2;">
+            <span>তীর বরাবর ভেসে যাওয়া দূরত্ব (Drift x):</span>
+            <strong id="valDrift" style="color: #ef4444;">0.00 km (সরাসরি বিপরীত বিন্দু)</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMULATOR 3: MULTIPLICATION -->
+    <section class="sim-view" id="sim-multiplication">
+      <div class="canvas-card">
+        <div class="canvas-header">
+          <h2>🌀 স্কেলার (ডট) ও ভেক্টর (ক্রস) গুণন ভিজ্যুয়ালাইজার</h2>
+          <span style="font-size: 0.85rem; color: #a855f7;">● জ্যামিতিক ক্ষেত্রফল</span>
+        </div>
+        <canvas id="canvasMult" width="700" height="480"></canvas>
+      </div>
+
+      <div class="controls-card">
+        <h3>🎛️ গুণন কন্ট্রোল</h3>
+
+        <div class="control-group">
+          <label><span>ভেক্টর \(|\vec{A}|\):</span> <strong id="lblA">10</strong></label>
+          <input type="range" id="rangeA" min="2" max="20" value="10">
+        </div>
+
+        <div class="control-group">
+          <label><span>ভেক্টর \(|\vec{B}|\):</span> <strong id="lblB">8</strong></label>
+          <input type="range" id="rangeB" min="2" max="20" value="8">
+        </div>
+
+        <div class="control-group">
+          <label><span>মধ্যবর্তী কোণ (\(\theta\)):</span> <strong id="lblThetaMult">45°</strong></label>
+          <input type="range" id="rangeThetaMult" min="0" max="180" value="45">
+          <div class="preset-btns">
+            <button class="btn-preset" onclick="setThetaMult(0)">0° (সমান্তরাল: ক্রস=0)</button>
+            <button class="btn-preset" onclick="setThetaMult(90)">90° (লম্ব: ডট=0)</button>
+            <button class="btn-preset" onclick="setThetaMult(180)">180°</button>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-box" style="border-left: 3px solid #10b981;">
+            <span>ডট গুণন (\(\vec{A} \cdot \vec{B}\)):</span>
+            <strong id="valDot" style="color: #10b981;">56.57</strong>
+          </div>
+          <div class="result-box" style="border-left: 3px solid #3b82f6;">
+            <span>ক্রস গুণন মান (\(|\vec{A} \times \vec{B}|\)):</span>
+            <strong id="valCross" style="color: #3b82f6;">56.57</strong>
+          </div>
+          <div class="result-box" style="border-left: 3px solid #a855f7; grid-column: span 2;">
+            <span>সামান্তরিকের ক্ষেত্রফল:</span>
+            <strong id="valArea" style="color: #a855f7;">56.57 বর্গ একক</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Lumen Coaching Center • পদার্থবিজ্ঞান ১ম পত্র: ভেক্টর সিমুলেশন ল্যাব • সর্বস্বত্ব সংরক্ষিত ২০২৬
+  </footer>
+
+  <script>
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sim-view').forEach(v => v.classList.remove('active'));
+
+      if (el) {
+        el.classList.add('active');
+      } else if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+      }
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+
+      if (tabId === 'sim-parallelogram') drawPgm();
+      if (tabId === 'sim-river') drawRiver();
+      if (tabId === 'sim-multiplication') drawMult();
+    }
+
+    // --- 1. Parallelogram Simulator ---
+    const cPgm = document.getElementById('canvasPgm');
+    const ctxPgm = cPgm.getContext('2d');
+    const rP = document.getElementById('rangeP');
+    const rQ = document.getElementById('rangeQ');
+    const rA = document.getElementById('rangeAlpha');
+
+    function setAlpha(val) {
+      rA.value = val;
+      drawPgm();
+    }
+
+    function drawPgm() {
+      if (!cPgm || !ctxPgm) return;
+      const P = parseFloat(rP.value);
+      const Q = parseFloat(rQ.value);
+      const alphaDeg = parseFloat(rA.value);
+      const alphaRad = (alphaDeg * Math.PI) / 180;
+
+      document.getElementById('lblP').textContent = P + ' N';
+      document.getElementById('lblQ').textContent = Q + ' N';
+      document.getElementById('lblAlpha').textContent = alphaDeg + '°';
+
+      const R = Math.sqrt(P * P + Q * Q + 2 * P * Q * Math.cos(alphaRad));
+      const thetaRad = Math.atan2(Q * Math.sin(alphaRad), P + Q * Math.cos(alphaRad));
+      const thetaDeg = (thetaRad * 180) / Math.PI;
+
+      document.getElementById('valR').textContent = R.toFixed(1) + ' N';
+      document.getElementById('valTheta').textContent = thetaDeg.toFixed(1) + '°';
+
+      ctxPgm.clearRect(0, 0, cPgm.width, cPgm.height);
+
+      const ox = 80;
+      const oy = cPgm.height - 80;
+      const scale = 1.3;
+
+      // Coordinate axes
+      ctxPgm.strokeStyle = '#1e293b';
+      ctxPgm.lineWidth = 1;
+      ctxPgm.beginPath();
+      ctxPgm.moveTo(ox, 20);
+      ctxPgm.lineTo(ox, oy);
+      ctxPgm.lineTo(cPgm.width - 20, oy);
+      ctxPgm.stroke();
+
+      const Px = ox + P * scale;
+      const Py = oy;
+      const Qx = ox + Q * Math.cos(alphaRad) * scale;
+      const Qy = oy - Q * Math.sin(alphaRad) * scale;
+      const Rx = Px + (Qx - ox);
+      const Ry = Qy;
+
+      // Dashed parallelogram lines
+      ctxPgm.setLineDash([5, 5]);
+      ctxPgm.strokeStyle = '#64748b';
+      ctxPgm.beginPath();
+      ctxPgm.moveTo(Px, Py); ctxPgm.lineTo(Rx, Ry);
+      ctxPgm.moveTo(Qx, Qy); ctxPgm.lineTo(Rx, Ry);
+      ctxPgm.stroke();
+      ctxPgm.setLineDash([]);
+
+      // P vector (Blue)
+      drawArrow(ctxPgm, ox, oy, Px, Py, '#3b82f6', 4);
+      ctxPgm.fillStyle = '#60a5fa';
+      ctxPgm.font = 'bold 15px sans-serif';
+      ctxPgm.fillText(`P = ${P}N`, Px / 2 + ox / 2 - 10, oy + 26);
+
+      // Q vector (Green)
+      drawArrow(ctxPgm, ox, oy, Qx, Qy, '#10b981', 4);
+      ctxPgm.fillStyle = '#34d399';
+      ctxPgm.font = 'bold 15px sans-serif';
+      ctxPgm.fillText(`Q = ${Q}N`, Qx / 2 + ox / 2 - 30, Qy / 2 + oy / 2 - 10);
+
+      // R vector (Gold)
+      drawArrow(ctxPgm, ox, oy, Rx, Ry, '#f59e0b', 5);
+      ctxPgm.fillStyle = '#fbbf24';
+      ctxPgm.font = 'bold 16px sans-serif';
+      ctxPgm.fillText(`R = ${R.toFixed(1)}N`, Rx + 10, Ry - 6);
+
+      // Angles
+      ctxPgm.strokeStyle = '#94a3b8';
+      ctxPgm.lineWidth = 1.5;
+      ctxPgm.beginPath();
+      ctxPgm.arc(ox, oy, 36, -alphaRad, 0);
+      ctxPgm.stroke();
+      ctxPgm.fillStyle = '#cbd5e1';
+      ctxPgm.font = '12px sans-serif';
+      ctxPgm.fillText(`α=${alphaDeg}°`, ox + 42, oy - 15);
+    }
+
+    rP.addEventListener('input', drawPgm);
+    rQ.addEventListener('input', drawPgm);
+    rA.addEventListener('input', drawPgm);
+
+    // --- 2. River Simulator ---
+    const cRiver = document.getElementById('canvasRiver');
+    const ctxRiver = cRiver ? cRiver.getContext('2d') : null;
+    const rU = document.getElementById('rangeU');
+    const rV = document.getElementById('rangeV');
+    const rD = document.getElementById('rangeD');
+    const rRiverAlpha = document.getElementById('rangeRiverAlpha');
+
+    function setRiverPreset(type) {
+      if (!rU || !rV || !rRiverAlpha) return;
+      const u = parseFloat(rU.value);
+      const v = parseFloat(rV.value);
+      if (type === 'min-time') {
+        rRiverAlpha.value = 90;
+      } else if (type === 'min-dist') {
+        if (v > u) {
+          const alphaRad = Math.acos(-u / v);
+          rRiverAlpha.value = Math.round((alphaRad * 180) / Math.PI);
+        } else {
+          alert('আড়াআড়ি পার হতে নৌকার বেগ স্রোতের চেয়ে বেশি হতে হবে (v > u)');
+        }
+      }
+      drawRiver();
+    }
+
+    function drawRiver() {
+      if (!cRiver || !ctxRiver) return;
+      const u = parseFloat(rU.value);
+      const v = parseFloat(rV.value);
+      const d = parseFloat(rD.value);
+      const alphaDeg = parseFloat(rRiverAlpha.value);
+      const alphaRad = (alphaDeg * Math.PI) / 180;
+
+      document.getElementById('lblU').textContent = u + ' km/h';
+      document.getElementById('lblV').textContent = v + ' km/h';
+      document.getElementById('lblD').textContent = d + ' km';
+      document.getElementById('lblRiverAlpha').textContent = alphaDeg + '°';
+
+      // Calculations
+      const vy = v * Math.sin(alphaRad);
+      const vx = u + v * Math.cos(alphaRad);
+      const w = Math.sqrt(vx * vx + vy * vy);
+
+      const timeHours = vy > 0 ? (d / vy) : 0;
+      const timeMins = (timeHours * 60).toFixed(1);
+      const driftX = (vx * timeHours).toFixed(2);
+
+      document.getElementById('valW').textContent = w.toFixed(2) + ' km/h';
+      document.getElementById('valTime').textContent = timeMins + ' মিনিট';
+      document.getElementById('valDrift').textContent = Math.abs(driftX) < 0.05 ? '0.00 km (সরাসরি বিপরীত বিন্দু!)' : `${driftX} km (${driftX > 0 ? 'ডানে' : 'বামে'} ভেসে গেছে)`;
+
+      // Render River on Canvas
+      ctxRiver.clearRect(0, 0, cRiver.width, cRiver.height);
+
+      const bankTop = 80;
+      const bankBottom = cRiver.height - 80;
+
+      // River Water Background
+      ctxRiver.fillStyle = '#0c2340';
+      ctxRiver.fillRect(40, bankTop, cRiver.width - 80, bankBottom - bankTop);
+
+      // Banks (Grass/Land)
+      ctxRiver.fillStyle = '#14532d';
+      ctxRiver.fillRect(40, bankTop - 24, cRiver.width - 80, 24);
+      ctxRiver.fillRect(40, bankBottom, cRiver.width - 80, 24);
+
+      // Bank text
+      ctxRiver.fillStyle = '#86efac';
+      ctxRiver.font = '13px sans-serif';
+      ctxRiver.fillText('নদীর ওপরের তীর (B বিন্দু)', 50, bankTop - 8);
+      ctxRiver.fillText('নদীর শুরুর তীর (A বিন্দু)', 50, bankBottom + 18);
+
+      // Water current arrows
+      ctxRiver.strokeStyle = '#0284c7';
+      ctxRiver.fillStyle = '#0284c7';
+      for (let y = bankTop + 40; y < bankBottom; y += 60) {
+        for (let x = 80; x < cRiver.width - 120; x += 140) {
+          drawArrow(ctxRiver, x, y, x + 40, y, '#0284c7', 2);
+        }
+      }
+      ctxRiver.fillText(`স্রোতের বেগ u = ${u} km/h →`, 240, bankTop + 25);
+
+      // Boat path & vectors
+      const startX = cRiver.width / 2 - 50;
+      const startY = bankBottom;
+      const targetX = startX + (vx / (vy || 1)) * (bankBottom - bankTop);
+      const targetY = bankTop;
+
+      // Boat direction vector v
+      const vLen = 100;
+      const vEndX = startX + vLen * Math.cos(alphaRad);
+      const vEndY = startY - vLen * Math.sin(alphaRad);
+      drawArrow(ctxRiver, startX, startY, vEndX, vEndY, '#10b981', 3);
+      ctxRiver.fillStyle = '#34d399';
+      ctxRiver.font = 'bold 13px sans-serif';
+      ctxRiver.fillText(`নৌকার দিক v = ${v}km/h (α=${alphaDeg}°)`, vEndX + 5, vEndY - 5);
+
+      // Actual Resultant Path
+      ctxRiver.setLineDash([6, 6]);
+      ctxRiver.strokeStyle = '#f59e0b';
+      ctxRiver.lineWidth = 3;
+      ctxRiver.beginPath();
+      ctxRiver.moveTo(startX, startY);
+      ctxRiver.lineTo(targetX, targetY);
+      ctxRiver.stroke();
+      ctxRiver.setLineDash([]);
+
+      // Boat icon at landing
+      ctxRiver.fillStyle = '#fbbf24';
+      ctxRiver.beginPath();
+      ctxRiver.arc(targetX, targetY, 8, 0, Math.PI * 2);
+      ctxRiver.fill();
+      ctxRiver.fillText(`অবতরণ বিন্দু (Drift=${driftX}km)`, targetX - 50, targetY - 12);
+    }
+
+    if (rU) rU.oninput = drawRiver;
+    if (rV) rV.oninput = drawRiver;
+    if (rD) rD.oninput = drawRiver;
+    if (rRiverAlpha) rRiverAlpha.oninput = drawRiver;
+
+    // --- 3. Multiplication Simulator ---
+    const cMult = document.getElementById('canvasMult');
+    const ctxMult = cMult.getContext('2d');
+    const rA_len = document.getElementById('rangeA');
+    const rB_len = document.getElementById('rangeB');
+    const rThetaMult = document.getElementById('rangeThetaMult');
+
+    function setThetaMult(val) {
+      rThetaMult.value = val;
+      drawMult();
+    }
+
+    function drawMult() {
+      const A = parseFloat(rA_len.value);
+      const B = parseFloat(rB_len.value);
+      const thetaDeg = parseFloat(rThetaMult.value);
+      const thetaRad = (thetaDeg * Math.PI) / 180;
+
+      document.getElementById('lblA').textContent = A;
+      document.getElementById('lblB').textContent = B;
+      document.getElementById('lblThetaMult').textContent = thetaDeg + '°';
+
+      const dotVal = A * B * Math.cos(thetaRad);
+      const crossVal = A * B * Math.sin(thetaRad);
+
+      document.getElementById('valDot').textContent = dotVal.toFixed(2);
+      document.getElementById('valCross').textContent = crossVal.toFixed(2);
+      document.getElementById('valArea').textContent = Math.abs(crossVal).toFixed(2) + ' বর্গ একক';
+
+      ctxMult.clearRect(0, 0, cMult.width, cMult.height);
+
+      const ox = 120;
+      const oy = cMult.height - 100;
+      const scale = 14;
+
+      const Ax = ox + A * scale;
+      const Ay = oy;
+      const Bx = ox + B * Math.cos(thetaRad) * scale;
+      const By = oy - B * Math.sin(thetaRad) * scale;
+
+      // Parallelogram Area fill (Representing Cross Product)
+      const Rx = Ax + (Bx - ox);
+      const Ry = By;
+
+      ctxMult.fillStyle = 'rgba(139, 92, 246, 0.2)';
+      ctxMult.beginPath();
+      ctxMult.moveTo(ox, oy);
+      ctxMult.lineTo(Ax, Ay);
+      ctxMult.lineTo(Rx, Ry);
+      ctxMult.lineTo(Bx, By);
+      ctxMult.closePath();
+      ctxMult.fill();
+
+      ctxMult.setLineDash([4, 4]);
+      ctxMult.strokeStyle = '#a855f7';
+      ctxMult.stroke();
+      ctxMult.setLineDash([]);
+
+      // Vector A
+      drawArrow(ctxMult, ox, oy, Ax, Ay, '#10b981', 4);
+      ctxMult.fillStyle = '#34d399';
+      ctxMult.font = 'bold 15px sans-serif';
+      ctxMult.fillText(`A = ${A}`, Ax / 2 + ox / 2, oy + 25);
+
+      // Vector B
+      drawArrow(ctxMult, ox, oy, Bx, By, '#3b82f6', 4);
+      ctxMult.fillStyle = '#60a5fa';
+      ctxMult.font = 'bold 15px sans-serif';
+      ctxMult.fillText(`B = ${B}`, Bx / 2 + ox / 2 - 25, By / 2 + oy / 2 - 10);
+
+      // Angle arc
+      ctxMult.strokeStyle = '#fbbf24';
+      ctxMult.lineWidth = 2;
+      ctxMult.beginPath();
+      ctxMult.arc(ox, oy, 40, -thetaRad, 0);
+      ctxMult.stroke();
+      ctxMult.fillStyle = '#fbbf24';
+      ctxMult.fillText(`θ = ${thetaDeg}°`, ox + 48, oy - 18);
+    }
+
+    rA_len.oninput = drawMult;
+    rB_len.oninput = drawMult;
+    rThetaMult.oninput = drawMult;
+
+    function drawArrow(ctx, fromx, fromy, tox, toy, color, width) {
+      const headlen = 10;
+      const angle = Math.atan2(toy - fromy, tox - fromx);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width;
+
+      ctx.beginPath();
+      ctx.moveTo(fromx, fromy);
+      ctx.lineTo(tox, toy);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(tox, toy);
+      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      drawPgm();
+    });
+  </script>
+</body>
+</html>
+

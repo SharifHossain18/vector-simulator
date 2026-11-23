@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ভেক্টর লেকচার শিট | Lumen Coaching Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #0f172a;
+      --primary-light: #2563eb;
+      --accent: #059669;
+      --accent-gold: #d97706;
+      --danger: #dc2626;
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e1;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --font-bn: 'Hind Siliguri', 'Nikosh', sans-serif;
+      --font-en: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-bn);
+      background-color: #e2e8f0;
+      color: var(--text-main);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* Print Controls Bar */
+    .no-print-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .no-print-bar h2 { font-size: 1.1rem; font-family: var(--font-bn); font-weight: 600; }
+    .btn-print {
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-print:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+    /* A4 Page Container */
+    .sheet-wrapper {
+      max-width: 900px;
+      margin: 24px auto;
+      background: var(--card-bg);
+      padding: 48px 56px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    /* Watermark */
+    .watermark {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 5.5rem;
+      font-weight: 800;
+      color: rgba(30, 58, 138, 0.03);
+      pointer-events: none;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+    }
+
+    /* Header Design */
+    .sheet-header {
+      border-bottom: 3px double var(--primary);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-title h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .brand-title span {
+      font-size: 0.95rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .brand-badge {
+      background: var(--primary);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .chapter-banner {
+      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chapter-banner h2 { font-size: 1.35rem; font-weight: 700; }
+    .chapter-banner p { font-size: 0.88rem; color: #bfdbfe; }
+
+    /* Student Info Box */
+    .student-info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 24px;
+      font-size: 0.88rem;
+    }
+    .info-field { border-bottom: 1px dotted #94a3b8; padding-bottom: 2px; }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+      margin: 28px 0 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 0 6px 6px 0;
+    }
+    .section-badge {
+      font-size: 0.75rem;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    /* Content Cards and Grids */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .content-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      transition: all 0.2s;
+    }
+    .content-box h3 {
+      font-size: 1.05rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .highlight-box {
+      background: #f0fdf4;
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: 0.95rem;
+    }
+    .alert-box {
+      background: #fef2f2;
+      border-left: 4px solid var(--danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+    }
+    .formula-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #2563eb;
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin: 14px 0;
+    }
+    .formula-title {
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.92rem;
+    }
+    .table-custom th, .table-custom td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .table-custom th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .table-custom tr:nth-child(even) { background: #f8fafc; }
+
+    /* Problem and Solution Card */
+    .problem-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .problem-header {
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+    }
+    .problem-body { padding: 14px; }
+    .solution-box {
+      background: #f0fdf4;
+      border-top: 1px dashed #86efac;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+    }
+
+    /* Diagram Styles */
+    .diagram-container {
+      text-align: center;
+      margin: 14px 0;
+    }
+    .diagram-container img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+    .diagram-caption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* Footer */
+    .sheet-footer {
+      border-top: 2px solid var(--border-color);
+      padding-top: 14px;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Print Optimization */
+    @media print {
+      body { background: white; }
+      .no-print-bar { display: none; }
+      .sheet-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 24px 30px;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .page-break { page-break-after: always; break-after: page; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (Screen Only) -->
+  <div class="no-print-bar">
+    <div>
+      <h2>📚 LUMEN COACHING CENTER — লেকচার শিট ভিউয়ার</h2>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <a href="index.html" style="color: #6ee7b7; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+        <span>🎮</span> লাইভ সিমুলেটর
+      </a>
+      <a href="presentation.html" style="color: #93c5fd; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+        <span>📺</span> স্লাইড প্রেজেন্টেশন
+      </a>
+      <button class="btn-print" onclick="window.print()">
+        <span>🖨️</span> লেকচার শিট প্রিন্ট করুন / Save as PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Sheet Container -->
+  <div class="sheet-wrapper">
+    <div class="watermark">LUMEN COACHING</div>
+
+    <!-- Official Header -->
+    <header class="sheet-header">
+      <div class="header-top">
+        <div class="brand-title">
+          <h1>LUMEN COACHING CENTER</h1>
+          <span>Excellence in Academic & Admission Care</span>
+        </div>
+        <div class="brand-badge">
+          <div>পদার্থবিজ্ঞান বিভাগ</div>
+          <small>এইচএসসি ও ভর্তি প্রস্তুতি</small>
+        </div>
+      </div>
+
+      <div class="chapter-banner">
+        <div>
+          <h2>অধ্যায়-০২: ভেক্টর (Vector)</h2>
+          <p>পদার্থবিজ্ঞান ১ম পত্র • পুর্ণাঙ্গ থিওরি, গাণিতিক মডেল ও ভর্তি শর্টকাট</p>
+        </div>
+        <div style="text-align: right;">
+          <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 4px; font-weight: bold;">লেকচার শিট #০১</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Student Info -->
+    <div class="student-info-grid">
+      <div class="info-field"><strong>শিক্ষার্থীর নাম:</strong> __________________</div>
+      <div class="info-field"><strong>রোল নং:</strong> __________________</div>
+      <div class="info-field"><strong>ব্যাচ:</strong> __________________</div>
+      <div class="info-field"><strong>তারিখ:</strong> __________________</div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-title">
+      <span>২.১ রাশি: স্কেলার রাশি বনাম ভেক্টর রাশি</span>
+      <span class="section-badge">মৌলিক ধারণা</span>
+    </div>
+
+    <p>বস্তুজগতে যা কিছু পরিমাপ করা যায় তাকেই <strong>রাশি (Physical Quantity)</strong> বলে। দিক বিবেচনার ভিত্তিতে যাবতীয় ভৌত রাশিকে প্রধানত দুই ভাগে ভাগ করা হয়:</p>
+
+    <div class="two-col-grid" style="margin-top: 12px;">
+      <div class="content-box">
+        <h3>📦 স্কেলার রাশি (Scalar Quantity)</h3>
+        <p>যে সকল ভৌত রাশিকে শুধু মান (Magnitude) দিয়ে সম্পূর্ণ প্রকাশ করা যায়, দিকের প্রয়োজন হয় না, তাদেরকে স্কেলার রাশি বলে।</p>
+        <p><strong>বৈশিষ্ট্য:</strong> সাধারণ পাটিগণিত ও বীজগণিতের নিয়মে যোগ, বিয়োগ, গুণ করা যায়।</p>
+        <p><strong>উদাহরণ:</strong> দৈর্ঘ্য, ভর, সময়, তাপমাত্রা, দ্রুতি, কাজ, ক্ষমতা, শক্তি, বৈদ্যুতিক বিভব ইত্যাদি।</p>
+      </div>
+
+      <div class="content-box" style="border-left: 4px solid var(--accent);">
+        <h3>🏹 ভেক্টর রাশি (Vector Quantity)</h3>
+        <p>যে সকল ভৌত রাশিকে সম্পূর্ণরূপে প্রকাশ করার জন্য মান ও দিক (Magnitude & Direction) উভয়ের প্রয়োজন হয়, তাদেরকে ভেক্টর রাশি বলে।</p>
+        <p><strong>বৈশিষ্ট্য:</strong> সাধারণ বীজগণিতে হয় না; বিশেষ ভেক্টর বীজগণিতের নিয়মে হিসাব করতে হয়।</p>
+        <p><strong>উদাহরণ:</strong> সরণ, বেগ, ত্বরণ, বল, ওজন, ভরবেগ, তড়িৎ প্রাবল্য, সান্দ্র বল ইত্যাদি।</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>📌 গুরুত্বপূর্ণ তথ্য:</strong> তড়িৎ প্রবাহ (Electric Current) এর নির্দিষ্ট দিক থাকা সত্ত্বেও এটি একটি <em>স্কেলার রাশি</em>, কারণ এটি ভেক্টর যোগের ত্রিভুজ বা সামান্তরিক সূত্র মেনে চলে না!
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-title">
+      <span>২.২ কতিপয় বিশেষ ভেক্টর (Types of Vectors)</span>
+      <span class="section-badge">সংজ্ঞা ও বৈশিষ্ট্য</span>
+    </div>
+
+    <table class="table-custom">
+      <thead>
+        <tr>
+          <th style="width: 25%;">ভেক্টরের নাম</th>
+          <th>সংজ্ঞা ও মূল বৈশিষ্ট্য</th>
+          <th style="width: 20%;">গাণিতিক রূপ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>১. স্বাধীন ভেক্টর</strong></td>
+          <td>যে ভেক্টরের পাদবিন্দু ইচ্ছেমতো পছন্দ করা যায়।</td>
+          <td>Free Vector</td>
+        </tr>
+        <tr>
+          <td><strong>২. সীমাবদ্ধ ভেক্টর</strong></td>
+          <td>যে ভেক্টরের পাদবিন্দু নির্দিষ্ট রাখা হয় (যেমন: অবস্থান ভেক্টর)।</td>
+          <td>Localized Vector</td>
+        </tr>
+        <tr>
+          <td><strong>৩. সদৃশ ভেক্টর</strong></td>
+          <td>সমজাতীয় দুই বা ততোধিক ভেক্টর একই দিকে ক্রিয়াশীল হলে।</td>
+          <td>\(\theta = 0^\circ\)</td>
+        </tr>
+        <tr>
+          <td><strong>৪. বিসদৃশ ভেক্টর</strong></td>
+          <td>সমজাতীয় দুটি ভেক্টর বিপরীত দিকে ক্রিয়াশীল হলে।</td>
+          <td>\(\theta = 180^\circ\)</td>
+        </tr>
+        <tr>
+          <td><strong>৫. সমান ভেক্টর</strong></td>
+          <td>মান সমান এবং দিক একই দিকে হলে দুটি ভেক্টর সমান।</td>
+          <td>\(\vec{A} = \vec{B}\)</td>
+        </tr>
+        <tr>
+          <td><strong>৬. ঋণাত্মক ভেক্টর</strong></td>
+          <td>মান সমান কিন্তু দিক পরস্পর বিপরীতমুখী হলে একটিকে অপরটির ঋণাত্মক বলে।</td>
+          <td>\(\vec{B} = -\vec{A}\)</td>
+        </tr>
+        <tr>
+          <td><strong>৭. নাল বা শূন্য ভেক্টর</strong></td>
+          <td>যে ভেক্টরের মান শূন্য। এর পাদবিন্দু ও শীর্ষবিন্দু একই স্থানে থাকে। সুনির্দিষ্ট দিক নেই।</td>
+          <td>\(\vec{0}\)</td>
+        </tr>
+        <tr>
+          <td><strong>৮. একক ভেক্টর</strong></td>
+          <td>যে ভেক্টরের মান ১ একক। কোনো অশূন্য ভেক্টরকে তার মান দিয়ে ভাগ করলে পাওয়া যায়।</td>
+          <td>\(\hat{a} = \frac{\vec{A}}{|\vec{A}|}\)</td>
+        </tr>
+        <tr>
+          <td><strong>৯. অবস্থান ভেক্টর</strong></td>
+          <td>মূলবিন্দুর সাপেক্ষে কোনো বিন্দুর অবস্থান নির্দেশক ভেক্টর (ব্যাসার্ধ ভেক্টর)।</td>
+          <td>\(\vec{r} = x\hat{i} + y\hat{j} + z\hat{k}\)</td>
+        </tr>
+        <tr>
+          <td><strong>১০. সরণ ভেক্টর</strong></td>
+          <td>অবস্থান ভেক্টরের পরিবর্তন: \(\Delta \vec{r} = \vec{r}_2 - \vec{r}_1\)</td>
+          <td>\(\vec{AB} = \vec{OB} - \vec{OA}\)</td>
+        </tr>
+        <tr>
+          <td><strong>১১. বিপ্রতীপ ভেক্টর</strong></td>
+          <td>দুটি সমান্তরাল ভেক্টরের একটির মান অপরটির বিপ্রতীপ হলে (যেমন: \(5\hat{i}\) ও \(\frac{1}{5}\hat{i}\))।</td>
+          <td>Reciprocal</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Page Break for Clean Printing -->
+    <div class="page-break"></div>
+
+    <!-- SECTION 3 -->
+    <div class="section-title">
+      <span>২.৪ সামান্তরিকের সূত্র ও লব্ধি বিশ্লেষণ</span>
+      <span class="section-badge">মূল ভিত্তি</span>
+    </div>
+
+    <div class="content-box">
+      <p><strong>সূত্রের বিবৃতি:</strong> যদি কোনো কণার ওপর একই সময়ে ক্রিয়ারত দুটি ভেক্টরকে কোনো সামান্তরিকের দুটি সন্নিহিত বাহু দ্বারা মানে ও দিকে নির্দেশ করা যায়, তবে ঐ বাহুদ্বয়ের ছেদবিন্দু দিয়ে অঙ্কিত সামান্তরিকের কর্ণই ভেক্টরদ্বয়ের লব্ধির মান ও দিক নির্দেশ করবে।</p>
+    </div>
+
+    <div class="two-col-grid">
+      <div class="formula-box">
+        <div class="formula-title">📐 লব্ধির মান (Magnitude)</div>
+        <p>ধরি, ভেক্টর দুটি \(P\) ও \(Q\) এবং মধ্যবর্তী কোণ \(\alpha\)। লব্ধি \(R\) হলে:</p>
+        <p style="font-size: 1.15rem; text-align: center; margin: 8px 0; color: #1e3a8a;">
+          \[ R = \sqrt{P^2 + Q^2 + 2PQ\cos\alpha} \]
+        </p>
+        <p><strong>যদি \(P = Q\) হয়:</strong> \(R = 2P\cos\left(\frac{\alpha}{2}\right)\)</p>
+      </div>
+
+      <div class="formula-box" style="border-left-color: var(--accent);">
+        <div class="formula-title" style="color: #065f46;">🧭 লব্ধির দিক (Direction)</div>
+        <p>লব্ধি \(R\) যদি \(P\) ভেক্টরের সাথে \(\theta\) কোণ উৎপন্ন করে:</p>
+        <p style="font-size: 1.15rem; text-align: center; margin: 8px 0; color: #065f46;">
+          \[ \tan\theta = \frac{Q\sin\alpha}{P + Q\cos\alpha} \]
+        </p>
+        <p><small>*যার সাথে কোণ (\(P\)), সে হরে একা বসবে!</small></p>
+      </div>
+    </div>
+
+    <div class="content-box">
+      <h3 style="color: var(--primary);">🔥 সামান্তরিক সূত্রের ৫টি বিশেষ ক্ষেত্র (Special Cases)</h3>
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>শর্ত / মধ্যবর্তী কোণ</th>
+            <th>লব্ধির মান (\(R\))</th>
+            <th>লব্ধির দিক (\(\theta\))</th>
+            <th>ভৌত তাৎপর্য</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>১. একই দিকে (\(\alpha = 0^\circ\))</strong></td>
+            <td>\(R_{\max} = P + Q\)</td>
+            <td>\(\theta = 0^\circ\)</td>
+            <td>লব্ধি সর্বোচ্চ মান লাভ করে</td>
+          </tr>
+          <tr>
+            <td><strong>২. বিপরীত দিকে (\(\alpha = 180^\circ\))</strong></td>
+            <td>\(R_{\min} = |P - Q|\)</td>
+            <td>\(\theta = 0^\circ\) (বড় বলের দিকে)</td>
+            <td>লব্ধি সর্বনিম্ন মান লাভ করে</td>
+          </tr>
+          <tr>
+            <td><strong>৩. পরস্পর লম্ব (\(\alpha = 90^\circ\))</strong></td>
+            <td>\(R = \sqrt{P^2 + Q^2}\)</td>
+            <td>\(\tan\theta = \frac{Q}{P}\)</td>
+            <td>পীথাগোরাসের উপপাদ্য প্রযোজ্য</td>
+          </tr>
+          <tr>
+            <td><strong>৪. সমান মানের ভেক্টর (\(P = Q\))</strong></td>
+            <td>\(R = 2P\cos(\alpha/2)\)</td>
+            <td>\(\theta = \alpha / 2\)</td>
+            <td>লব্ধি ভেক্টরদ্বয়ের কোণকে সমদ্বিখণ্ডিত করে</td>
+          </tr>
+          <tr>
+            <td><strong>৫. \(P = Q = R\) হলে</strong></td>
+            <td>মান তিনটি সমান</td>
+            <td>\(\alpha = 120^\circ\)</td>
+            <td>ভর্তি পরীক্ষার সর্বাধিক জিজ্ঞাসিত প্রশ্ন!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-title">
+      <span>২.৫ বাস্তব জীবনের প্রয়োগ: নদী-নৌকা ও বৃষ্টি-ছাতা</span>
+      <span class="section-badge">গাণিতিক মডেল</span>
+    </div>
+
+    <div class="two-col-grid">
+      <!-- River Boat -->
+      <div class="content-box" style="border-top: 3px solid #0284c7;">
+        <h3 style="color: #0284c7;">⛵ নদী ও নৌকা সমস্যা</h3>
+        <p><strong>ধরি:</strong> নদীর প্রস্থ \(= d\), স্রোতের বেগ \(= u\), নৌকার বেগ \(= v\), যাত্রার কোণ \(= \alpha\)।</p>
+        
+        <div style="background: #f0f9ff; padding: 10px; border-radius: 6px; margin: 8px 0;">
+          <strong>কেস ১: সর্বনিম্ন সময়ে নদী পারাপার</strong><br>
+          • কোণ: \(\alpha = 90^\circ\) (সরাসরি নদীর প্রস্থ বরাবর রওনা)<br>
+          • প্রয়োজনীয় ন্যূনতম সময়: \(t_{\min} = \frac{d}{v}\)<br>
+          • লব্ধি বেগ: \(w = \sqrt{u^2 + v^2}\)<br>
+          • নদীর তীর বরাবর ভেসে যাওয়া দূরত্ব: \(x = u \times t_{\min} = \frac{ud}{v}\)
+        </div>
+
+        <div style="background: #ecfdf5; padding: 10px; border-radius: 6px; margin: 8px 0;">
+          <strong>কেস ২: আড়াআড়ি / সর্বনিম্ন দূরত্বে পারাপার</strong><br>
+          • ঠিক বিপরীত বিন্দুতে পৌঁছাতে হলে (\(\theta = 90^\circ\)):<br>
+          • কোণ: \(\cos\alpha = -\frac{u}{v} \implies \alpha = \cos^{-1}\left(-\frac{u}{v}\right)\)<br>
+          • লব্ধি বেগ: \(w = \sqrt{v^2 - u^2}\)<br>
+          • প্রয়োজনীয় সময়: \(t = \frac{d}{\sqrt{v^2 - u^2}}\) (\(v > u\) আবশ্যক)
+        </div>
+      </div>
+
+      <!-- Rain Umbrella & Lawn Roller -->
+      <div class="content-box" style="border-top: 3px solid #8b5cf6;">
+        <h3 style="color: #8b5cf6;">🌧️ বৃষ্টি-ছাতা ও লন রোলার</h3>
+        <p><strong>বৃষ্টি ও পথচারীর আপেক্ষিক বেগ:</strong></p>
+        <p>বৃষ্টির বেগ \(v_r\), পথচারীর বেগ \(v_m\) হলে আপেক্ষিক বেগ \(\vec{v}_{rm} = \vec{v}_r - \vec{v}_m\)।</p>
+        <p>উল্লম্বের সাথে ছাতা ধরার কোণ:</p>
+        <p style="text-align: center; margin: 6px 0;">\[ \tan\theta = \frac{\text{পথচারীর বেগ } (v_m)}{\text{বৃষ্টির বেগ } (v_r)} \]</p>
+        
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+        <p><strong>🚜 লন রোলারকে ঠেলার চেয়ে টানা সহজ কেন?</strong></p>
+        <p>• <strong>ঠেলা (Push):</strong> \(W_{\text{eff}} = W + F\sin\theta\) \(\rightarrow\) ওজন বাড়ে, ঘর্ষণ বাড়ে, ঠেলা কষ্টকর।</p>
+        <p>• <strong>টানা (Pull):</strong> \(W_{\text{eff}} = W - F\sin\theta\) \(\rightarrow\) ওজন কমে, ঘর্ষণ কমে, টানা সহজ!</p>
+      </div>
+    </div>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- SECTION 5 -->
+    <div class="section-title">
+      <span>২.৮ ভেক্টরের গুণন: স্কেলার (ডট) ও ভেক্টর (ক্রস) গুণন</span>
+      <span class="section-badge">গুরুত্বপূর্ণ অধ্যায়</span>
+    </div>
+
+    <div class="two-col-grid">
+      <!-- Dot Product -->
+      <div class="content-box" style="border-left: 4px solid #10b981;">
+        <h3 style="color: #047857;">🟢 স্কেলার বা ডট গুণন (Dot Product)</h3>
+        <p><strong>সংজ্ঞা:</strong> \(\vec{A} \cdot \vec{B} = AB\cos\theta\)</p>
+        <p><strong>উপাংশে প্রকাশ:</strong> \(\vec{A} \cdot \vec{B} = A_x B_x + A_y B_y + A_z B_z\)</p>
+        <p><strong>একক ভেক্টরের গুণন:</strong></p>
+        <p>• \(\hat{i}\cdot\hat{i} = \hat{j}\cdot\hat{j} = \hat{k}\cdot\hat{k} = 1\)</p>
+        <p>• \(\hat{i}\cdot\hat{j} = \hat{j}\cdot\hat{k} = \hat{k}\cdot\hat{i} = 0\)</p>
+        
+        <div class="alert-box" style="padding: 8px 12px; margin: 8px 0;">
+          <strong>🛑 লম্ব হওয়ার শর্ত (\(\theta = 90^\circ\)):</strong><br>
+          \[ \vec{A} \cdot \vec{B} = 0 \implies A_x B_x + A_y B_y + A_z B_z = 0 \]
+        </div>
+
+        <p><strong>অভিক্ষেপ ও উপাংশ:</strong></p>
+        <p>• \(\vec{B}\) এর ওপর \(\vec{A}\) এর লম্ব অভিক্ষেপ \(= \frac{\vec{A} \cdot \vec{B}}{|\vec{B}|}\)</p>
+        <p>• \(\vec{B}\) বরাবর \(\vec{A}\) এর উপাংশ \(= \left(\frac{\vec{A} \cdot \vec{B}}{|\vec{B}|^2}\right)\vec{B}\)</p>
+      </div>
+
+      <!-- Cross Product -->
+      <div class="content-box" style="border-left: 4px solid #3b82f6;">
+        <h3 style="color: #1d4ed8;">🔵 ভেক্টর বা ক্রস গুণন (Cross Product)</h3>
+        <p><strong>সংজ্ঞা:</strong> \(\vec{A} \times \vec{B} = AB\sin\theta\,\hat{\eta}\) (স্ক্রু নিয়ম)</p>
+        <p><strong>নির্ণায়ক পদ্ধতি:</strong></p>
+        <p>\[ \vec{A} \times \vec{B} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix} \]</p>
+        <p><strong>একক ভেক্টরের গুণন (Cyclic):</strong></p>
+        <p>• \(\hat{i}\times\hat{i} = \hat{j}\times\hat{j} = \hat{k}\times\hat{k} = 0\)</p>
+        <p>• \(\hat{i}\times\hat{j} = \hat{k}, \hat{j}\times\hat{k} = \hat{i}, \hat{k}\times\hat{i} = \hat{j}\)</p>
+        
+        <div class="alert-box" style="padding: 8px 12px; margin: 8px 0; background: #eff6ff; border-left-color: #2563eb;">
+          <strong>🛑 সমান্তরাল হওয়ার শর্ত (\(\theta = 0^\circ\)):</strong><br>
+          \[ \vec{A} \times \vec{B} = 0 \iff \frac{A_x}{B_x} = \frac{A_y}{B_y} = \frac{A_z}{B_z} \]
+        </div>
+
+        <p><strong>জ্যামিতিক ক্ষেত্রফল:</strong></p>
+        <p>• সামান্তরিকের ক্ষেত্রফল (সন্নিহিত বাহু) \(= |\vec{A} \times \vec{B}|\)</p>
+        <p>• সামান্তরিকের ক্ষেত্রফল (কর্ণদ্বয়) \(= \frac{1}{2}|\vec{d}_1 \times \vec{d}_2|\)</p>
+        <p>• ত্রিভুজের ক্ষেত্রফল \(= \frac{1}{2}|\vec{A} \times \vec{B}|\)</p>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-title">
+      <span>২.৯ ভেক্টর ক্যালকুলাস (Vector Calculus)</span>
+      <span class="section-badge">উচ্চতর বিষয়</span>
+    </div>
+
+    <div class="content-box">
+      <p><strong>ভেক্টর ডিফারেনশিয়াল অপারেটর (ডেল / নাবলা):</strong> \(\vec{\nabla} = \hat{i}\frac{\partial}{\partial x} + \hat{j}\frac{\partial}{\partial y} + \hat{k}\frac{\partial}{\partial z}\)</p>
+    </div>
+
+    <div class="three-col-grid">
+      <div class="content-box" style="background: #faf5ff; border-top: 3px solid #a855f7;">
+        <h3 style="color: #7e22ce;">১. গ্রেডিয়েন্ট (Gradient)</h3>
+        <p>\[ \text{grad}\,\phi = \vec{\nabla}\phi \]</p>
+        <p>• <strong>রূপান্তর:</strong> স্কেলার \(\rightarrow\) ভেক্টর</p>
+        <p>• স্কেলার রাশির সর্বাধিক বৃদ্ধির হার ও পরিবর্তনের দিক নির্দেশ করে।</p>
+        <p>• উদাহরণ: পাহাড়ের ঢাল, তাপমাত্রার সর্বাধিক পরিবর্তন।</p>
+      </div>
+
+      <div class="content-box" style="background: #f0fdf4; border-top: 3px solid #22c55e;">
+        <h3 style="color: #15803d;">২. ডাইভারজেন্স (Divergence)</h3>
+        <p>\[ \text{div}\,\vec{V} = \vec{\nabla} \cdot \vec{V} \]</p>
+        <p>• <strong>রূপান্তর:</strong> ভেক্টর \(\rightarrow\) স্কেলার</p>
+        <p>• ফ্লাক্স বা তরলের নির্গমন/আগমন নির্দেশ করে।</p>
+        <p>• <strong>সলিনয়ডাল শর্ত:</strong><br><strong style="color: #15803d;">\(\vec{\nabla} \cdot \vec{V} = 0\)</strong> (প্রবাহী অসংকোচনীয়)।</p>
+      </div>
+
+      <div class="content-box" style="background: #fef2f2; border-top: 3px solid #ef4444;">
+        <h3 style="color: #b91c1c;">৩. কার্ল (Curl)</h3>
+        <p>\[ \text{curl}\,\vec{V} = \vec{\nabla} \times \vec{V} \]</p>
+        <p>• <strong>রূপান্তর:</strong> ভেক্টর \(\rightarrow\) ভেক্টর</p>
+        <p>• ক্ষেত্রের ঘূর্ণন প্রবণতা ও কৌণিক বেগ নির্দেশ করে (\(\text{curl}\,\vec{v} = 2\vec{\omega}\))।</p>
+        <p>• <strong>অঘূর্ণনশীল ও সংরক্ষণশীল বলের শর্ত:</strong><br><strong style="color: #b91c1c;">\(\vec{\nabla} \times \vec{V} = 0\)</strong>।</p>
+      </div>
+    </div>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- SECTION 7: Practice Questions -->
+    <div class="section-title">
+      <span>বোর্ড ও ভর্তি পরীক্ষার গুরুত্বপূর্ণ গাণিতিক সমস্যা ও সমাধান</span>
+      <span class="section-badge">প্র্যাকটিস ব্যাংক</span>
+    </div>
+
+    <!-- Problem 1 -->
+    <div class="problem-card">
+      <div class="problem-header">
+        <span>গাণিতিক সমস্যা ০১: লম্ব হওয়ার শর্তে অজানা মান নির্ণয়</span>
+        <span style="color: #2563eb;">[ঢাকা বোর্ড ২০২১, চবি ভর্তি]</span>
+      </div>
+      <div class="problem-body">
+        <p><strong>প্রশ্ন:</strong> \(\vec{A} = 2\hat{i} + a\hat{j} - 3\hat{k}\) এবং \(\vec{B} = 4\hat{i} - 2\hat{j} + 6\hat{k}\) ভেক্টর দুটি পরস্পর লম্ব হলে \(a\) এর মান কত?</p>
+      </div>
+      <div class="solution-box">
+        <p><strong>সমাধান:</strong> দুটি ভেক্টর পরস্পর লম্ব হওয়ার শর্ত হলো তাদের ডট গুণন শূন্য হবে, অর্থাৎ \(\vec{A} \cdot \vec{B} = 0\)।</p>
+        <p>\[ \implies (2)(4) + (a)(-2) + (-3)(6) = 0 \]</p>
+        <p>\[ \implies 8 - 2a - 18 = 0 \implies -2a = 10 \implies a = -5 \quad \mathbf{[উত্তর: -5]} \]</p>
+      </div>
+    </div>
+
+    <!-- Problem 2 -->
+    <div class="problem-card">
+      <div class="problem-header">
+        <span>গাণিতিক সমস্যা ০২: সমান্তরাল হওয়ার শর্ত (শর্টকাট মেথড)</span>
+        <span style="color: #2563eb;">[রাজশাহী বোর্ড ২০২৩, বুয়েট প্রিলি]</span>
+      </div>
+      <div class="problem-body">
+        <p><strong>প্রশ্ন:</strong> \(\vec{P} = 3\hat{i} - 2\hat{j} + \hat{k}\) এবং \(\vec{Q} = 6\hat{i} - m\hat{j} + 2\hat{k}\) ভেক্টরদ্বয় পরস্পর সমান্তরাল হলে \(m\) এর মান কত?</p>
+      </div>
+      <div class="solution-box">
+        <p><strong>সমাধান:</strong> সমান্তরাল ভেক্টরের সহগসমূহের অনুপাত সমান থাকে:</p>
+        <p>\[ \frac{P_x}{Q_x} = \frac{P_y}{Q_y} \implies \frac{3}{6} = \frac{-2}{-m} \implies \frac{1}{2} = \frac{2}{m} \implies m = 4 \quad \mathbf{[উত্তর: 4]} \]</p>
+      </div>
+    </div>
+
+    <!-- Problem 3 -->
+    <div class="problem-card">
+      <div class="problem-header">
+        <span>গাণিতিক সমস্যা ০৩: সর্বনিম্ন দূরত্বে নদী পারাপার</span>
+        <span style="color: #2563eb;">[যশোর বোর্ড ২০২২, বুটেক্স ভর্তি]</span>
+      </div>
+      <div class="problem-body">
+        <p><strong>প্রশ্ন:</strong> একটি নদীতে স্রোতের বেগ \(3\text{ km/h}\)। একজন মাঝি \(6\text{ km/h}\) বেগে নৌকা চালিয়ে নদীর ঠিক বিপরীত বিন্দুতে পৌঁছাতে চান। (ক) মাঝিকে কোন দিকে নৌকা চালাতে হবে? (খ) নদীর প্রস্থ \(1.5\text{ km}\) হলে পার হতে কত সময় লাগবে?</p>
+      </div>
+      <div class="solution-box">
+        <p><strong>সমাধান:</strong></p>
+        <p>(ক) ঠিক বিপরীত বিন্দুতে পৌঁছাতে যাত্রা কোণ \(\alpha\):</p>
+        <p>\[ \cos\alpha = -\frac{u}{v} = -\frac{3}{6} = -\frac{1}{2} \implies \alpha = \cos^{-1}\left(-\frac{1}{2}\right) = 120^\circ \]</p>
+        <p>সুতরাং, স্রোতের সাথে \(120^\circ\) কোণে যাত্রা করতে হবে।</p>
+        <p>(খ) কার্যকরী লব্ধি বেগ \(w = \sqrt{v^2 - u^2} = \sqrt{6^2 - 3^2} = \sqrt{27} \approx 5.196\text{ km/h}\)।</p>
+        <p>প্রয়োজনীয় সময় \(t = \frac{d}{w} = \frac{1.5}{5.196} \approx 0.2887\text{ h} = 0.2887 \times 60 \approx 17.32\text{ মিনিট} \quad \mathbf{[উত্তর: 17.32 মিনিট]}\)</p>
+      </div>
+    </div>
+
+    <!-- Problem 4 -->
+    <div class="problem-card">
+      <div class="problem-header">
+        <span>গাণিতিক সমস্যা ০৪: সলিনয়ডাল ক্ষেত্রের শর্ত</span>
+        <span style="color: #2563eb;">[ঢাকা বিশ্ববিদ্যালয় ক-ইউনিট]</span>
+      </div>
+      <div class="problem-body">
+        <p><strong>প্রশ্ন:</strong> \(\vec{V} = (x + 3y)\hat{i} + (y - 2z)\hat{j} + (x + az)\hat{k}\) ভেক্টর ক্ষেত্রটি সলিনয়ডাল হলে \(a\) এর মান কত?</p>
+      </div>
+      <div class="solution-box">
+        <p><strong>সমাধান:</strong> ক্ষেত্রটি সলিনয়ডাল হলে \(\vec{\nabla} \cdot \vec{V} = 0\)।</p>
+        <p>\[ \frac{\partial}{\partial x}(x + 3y) + \frac{\partial}{\partial y}(y - 2z) + \frac{\partial}{\partial z}(x + az) = 0 \]</p>
+        <p>\[ \implies 1 + 1 + a = 0 \implies 2 + a = 0 \implies a = -2 \quad \mathbf{[উত্তর: -2]} \]</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sheet-footer">
+      <div>
+        <strong>Lumen Coaching Center</strong> • একাডেমিক ও ভর্তি কেয়ার
+      </div>
+      <div>
+        Physics 1st Paper • Chapter 2: Vector Handout
+      </div>
+      <div>
+        পৃষ্ঠা নং: শেষ
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
+
